@@ -1,0 +1,91 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "String"
+    },
+    "hostingPlanName": {
+      "type": "String"
+    },
+    "location": {
+      "type": "String"
+    },
+    "hostingEnvironment": {
+      "type": "String"
+    },
+    "serverFarmResourceGroup": {
+      "type": "String"
+    },
+    "subscriptionId": {
+      "type": "String"
+    },
+    "customHostname": {
+      "type": "string",
+      "metadata": {
+        "description": "The custom hostname that you wish to add."
+      }
+    }
+
+  },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('name')]",
+            "apiVersion": "2016-03-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "[concat('hidden-related:', '/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty"
+            },
+            "properties": {
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "PHPMYADMIN_EXTENSION_VERSION",
+                            "value": "latest"
+                        },
+                        {
+                            "name": "SITE_ADMIN_USERNAME",
+                            "value": "admin"
+                        },
+                        {
+                            "name": "SITE_ADMIN_PASSWORD",
+                            "value": "abcd@1234"
+                        }
+                    ],
+                    "phpVersion": "5.6",
+                    "localMySqlEnabled": true
+                },
+                "name": "[parameters('name')]",
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "hostingEnvironment": "[parameters('hostingEnvironment')]"
+            },
+          "resources": [
+            {
+              "type": "sourcecontrols",
+              "name": "web",
+              "apiVersion": "2016-03-01",
+              "properties": {
+                "RepoUrl": "https://github.com/SunBuild/mediawiki-azure",
+                "branch": "master",
+                "IsManualIntegration": true
+              },
+              {
+                "type": "Microsoft.Web/sites/hostnameBindings",
+                "name": "[concat(parameters('name'), '/', parameters('customHostname'))]",
+                "apiVersion": "2016-03-01",
+                "location": "[resourceGroup().location]",
+                "properties": {
+                },
+                "dependsOn": [
+                  "[concat('Microsoft.Web/sites/',parameters('name'))]"
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+              ]
+            }
+          ]
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "value": "naatkainaat"
+        },
+        "hostingPlanName": {
+            "value": "ServicePlan150f018e-afcb"
+        },
+        "location": {
+            "value": "South Central US"
+        },
+        "hostingEnvironment": {
+            "value": ""
+        },
+        "serverFarmResourceGroup": {
+            "value": "Novadex"
+        },
+        "subscriptionId": {
+            "value": "cc3135c5-f1df-4e98-aaeb-416591861fb5"
+        }
+    }
+}
