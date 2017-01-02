@@ -19,12 +19,6 @@
     },
     "subscriptionId": {
       "type": "String"
-    },
-    "customHostname": {
-      "type": "string",
-      "metadata": {
-        "description": "The custom hostname that you wish to add."
-      }
     }
 
   },
@@ -69,18 +63,7 @@
                 "RepoUrl": "https://github.com/SunBuild/mediawiki-azure",
                 "branch": "master",
                 "IsManualIntegration": true
-              },
-              {
-                "type": "Microsoft.Web/sites/hostnameBindings",
-                "name": "[concat(parameters('name'), '/', parameters('customHostname'))]",
-                "apiVersion": "2016-03-01",
-                "location": "[resourceGroup().location]",
-                "properties": {
-                },
-                "dependsOn": [
-                  "[concat('Microsoft.Web/sites/',parameters('name'))]"
-                ]
-              },
+              }
               "dependsOn": [
                 "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
               ]
